@@ -21,7 +21,7 @@ renamed as (
 
         ---------- numerics
        amount,
-        ---------- timestamps
+        ---------- timestamps,etc
         created,
         _batched_at as batched_at
 
