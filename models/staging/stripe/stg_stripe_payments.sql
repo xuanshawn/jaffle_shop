@@ -13,7 +13,7 @@ renamed as (
 
         ----------  ids
         id as payment_id,
-        orderid as order_id,
+        cast(orderid as string) as order_id,
 
         ---------- text
         paymentmethod as payment_method,
