@@ -12,6 +12,13 @@ sources:
         description: One record per order (consisting of one or more order items)
         config:
           loaded_at_field: ordered_at
+          freshness:
+            error_after:
+              count: 24
+              period: hour
+            warn_after:
+              count: 48
+              period: hour
       - name: raw_items
         description: Items included in an order
       - name: raw_stores
@@ -21,3 +28,11 @@ sources:
         description: One record per SKU for items sold in stores
       - name: raw_supplies
         description: One record per supply per SKU of items sold in stores
+
+      # - name: orders
+      #   description: freshness config 
+      #   config:
+      #     freshness:
+      #       error_after: 1 day
+      #       warn_after: 1 day
+      #     loaded_at_field: ordered_at
