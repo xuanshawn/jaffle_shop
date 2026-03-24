@@ -3,7 +3,8 @@ with
 source as (
 
     -- {# This references seed (CSV) data - try switching to {{ source('ecom', 'raw_stores') }} #}
-    select * from dbt-tutorial.stripe.payment
+    -- select * from dbt-tutorial.stripe.payment
+    select * from {{ source('stripe', 'payment') }}
 
 ),
 
@@ -20,9 +21,9 @@ renamed as (
         status,
 
         ---------- numerics
-       amount,
+       amount/100 as amount,
         ---------- timestamps,etc
-        created,
+        created as created_at,
         _batched_at as batched_at
 
     from source
