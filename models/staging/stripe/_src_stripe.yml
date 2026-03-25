@@ -4,3 +4,13 @@ sources:
     schema: stripe
     tables:
       - name: payment
+        columns:
+          - name: status
+            description: '{{doc("payment_status")}}' #if single quotes inside, use double quotes outside
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: ["succeeded", "failed", "pending"]
+
+
+
