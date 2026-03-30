@@ -1,3 +1,7 @@
+-- {{ config(materialized='incremental') }}
+
+
+
 with
 
 customers as (
@@ -15,9 +19,18 @@ payments as (
 
     select * from {{ ref('stg_stripe_payments') }}
 
-)
-select c.customer_id, o.order_id, sum(p.amount) as amount
+),
+final as (
+select c.customer_id, o.order_id, o.order_date, sum(p.amount) as amount
 from customers c 
 join orders o on c.customer_id = o.customer_id
 join payments p on o.order_id = p.order_id
-group by 1,2
+group by 1,2,3
+)
+select * from final
+
+
+-- select * from final
+-- {% if is_incremental() %}
+-- where order_date > (select max(order_date) from {{ this }})
+-- {% endif %}
