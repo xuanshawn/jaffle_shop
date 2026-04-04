@@ -1,3 +1,5 @@
+-- {{ config(materialized='table') }}
+
 with
 
 source as (
@@ -21,7 +23,8 @@ renamed as (
         status,
 
         ---------- numerics
-       amount/100 as amount,
+    --    amount/100 as amount,
+       {{bigquery__cents_to_dollars('amount')}} as amount,
         ---------- timestamps,etc
         created as created_at,
         _batched_at as batched_at
