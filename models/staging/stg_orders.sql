@@ -1,34 +1,25 @@
-with
+{% set as_of_date = var('as_of_date', none) %}
 
+with 
 source as (
-
-    -- {# This references seed (CSV) data - try switching to {{ source('ecom', 'raw_orders') }} #}
-    select * from {{ ref('raw_orders') }}
-
+    select * from {{ source('jaffle_shop', 'orders') }}
 ),
 
-renamed as (
-
-    select
-
-        ----------  ids
+staged as (
+    select 
         id as order_id,
-        store_id as location_id,
-        customer as customer_id,
+        user_id as customer_id,
+        order_date,
+        date_diff(current_date(), order_date, day) as days_since_ordered,
+        status like '%pending%' as is_status_pending,
+        case 
 
-        ---------- numerics
-        subtotal as subtotal_cents,
-        tax_paid as tax_paid_cents,
-        order_total as order_total_cents,
-        {{ cents_to_dollars('subtotal') }} as subtotal,
-        {{ cents_to_dollars('tax_paid') }} as tax_paid,
-        {{ cents_to_dollars('order_total') }} as order_total,
-
-        ---------- timestamps
-        cast(ordered_at as date) as order_date
-
+            when status like '%returned%' then 'returned'
+            when status like '%pending%' then 'placed'
+            else status
+        end as status
     from source
+        
 
 )
-
-select * from renamed
+select * from staged
