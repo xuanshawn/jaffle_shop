@@ -10,9 +10,11 @@ clean-targets:
   - "dbt_packages"
 
 seeds:
-  # Builds seeds into '<your_schema_name>_raw'
+  # Builds seeds into '<your_schema_name>_raw' config destination
   jaffle_shop:
     +schema: raw
+    # employees:
+    #   +schema: hr
 
 models:
   jaffle_shop:
@@ -22,3 +24,10 @@ models:
       +materialized: view
     marts:
       +materialized: table
+
+# models:
+#   model_name:
+#     forder1:
+#       +materialized: table
+#     folder2:
+#       +materialized: table
